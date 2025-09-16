@@ -8,7 +8,7 @@
  *@param z значение параметра z
  *@return рассчитывает значение
  */
-double defA (double x, double y, double z);
+double defA (const double x,const double y,const double z);
 /**
  *@brief Рассчитывает значение функции B
  *@param x значение параметра x
@@ -16,7 +16,7 @@ double defA (double x, double y, double z);
  *@param z значение параметра z
  *@return рассчитывает значение
  */
-double defB (double x, double y, double z);
+double defB (const double x,const double y,const double z);
 
 /**
  * @brief точка входа в программу
@@ -39,10 +39,12 @@ int main(void)
 
     return 0; 
 }
+
 double defA(double x, double y, double z)
 {
     return (2 * pow(z, x))/(sqrt(pow(y, x)* pow(cos(x + y), 2)) - 3 * z);
 }
+
 double defB(double x, double y, double z)
 {
     return x * exp(sqrt(z))*cos((pow(x,2))/(y*z));
