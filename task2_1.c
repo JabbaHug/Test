@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/**
+ * @brief рассчитывает гепотенузу по теореме Пифагора
+ * @param kat1 первый катет треугольника
+ * @param kat2 второй катет треугольника
+ * @return возвращает рассчитанной гепотенузы
+ */
+double getH(const double kat1, const double kat2);
+
+/**
+ * @brief рассчитывает периметр треугольника
+ * @param kat1 первый катет треугольника
+ * @param kat2 второй катет треугольника
+ * @param hyp гипотенуза треугольника
+ * @return возвращает рассчитанный периметр
+ */
+double getP(const double kat1, const double kat2, double hyp);
+
+/**
+ * @brief рассчитывает площадь треугольника
+ * @param kat1 первый катет треугольника
+ * @param kat2 второй катет треугольника
+ * @return возвращает рассчитанную площадь
+ */
+double getS(const double kat1, const double kat2);
+
+/**
+ * @brief считывает значение, введенное с клавиатуры, с проверкой ввода
+ * @return считанное значение
+ */
+double getValue();
+
+/**
+ * @brief проверяет,что переменная положительная
+ * @param value значение проверяемой переменной
+ */
+void checkValue(const double value);
+
+/**
+ * @brief Точка входа в программу
+ * @return возвращает 0, если программма выполнена корректно
+ */
+int main(void)
+{
+    printf("Введите стороны треугольника: ");
+
+    double kat1 = getValue();
+    checkValue(kat1);
+    double kat2 = getValue();
+    checkValue(kat2);
+
+    double hyp = getH(kat1, kat2);
+
+    printf("Периметр равен %.2lf\n",getP(kat1, kat2, hyp));
+    printf("Площадь равна %.2lf",getS(kat1, kat2));
+    return 0;
+}
+
+/*теорема пифагора*/
+double getH(const double kat1, const double kat2)
+{
+    return sqrt(pow(kat1, 2)+pow(kat2, 2));
+}
+
+double getP(const double kat1, const double kat2, const double hyp)
+{
+    return kat1 + kat2 + hyp;
+}
+
+double getS(const double kat1, const double kat2)
+{
+    return 0.5 * kat1 * kat2;
+}
+
+double getValue()
+{
+    double value = 0;
+    if (!scanf("%lf",&value))
+    {
+        printf("Error\n");
+        abort();
+    }
+    return value;
+}
+
+void checkValue(const double value)
+{
+    if (value <= 0 )
+    {
+        printf("Value have to be positive\n");
+        abort();
+    }
+}
