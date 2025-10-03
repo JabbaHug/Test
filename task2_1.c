@@ -54,15 +54,31 @@ int main(void)
 
     double hyp = getH(kat1, kat2);
 
-    printf("Периметр равен %.2lf\n",getP(kat1, kat2, hyp));
-    printf("Площадь равна %.2lf",getS(kat1, kat2));
+    printf("Выберите, что посчитать:\n1)Периметр   2)Площадь\n");
+
+    int choice = (int)getValue();
+    switch (choice)
+    {
+    case 1:
+        printf("Периметр равен %.2lf",getP(kat1, kat2, hyp));
+        break;
+
+    case 2:
+        printf("Площадь равна %.2lf",getS(kat1, kat2));
+        break;
+
+    default:
+        printf("Неправильный выбор. Выберите 1 или 2\n");
+        abort();
+    }
+
     return 0;
 }
 
 /*теорема пифагора*/
 double getH(const double kat1, const double kat2)
 {
-    return sqrt(pow(kat1, 2)+pow(kat2, 2));
+    return sqrt(pow(kat1, 2) + pow(kat2, 2));
 }
 
 double getP(const double kat1, const double kat2, const double hyp)
@@ -80,7 +96,7 @@ double getValue()
     double value = 0;
     if (!scanf("%lf",&value))
     {
-        printf("Error\n");
+        printf("Ошибка ввода\n");
         abort();
     }
     return value;
@@ -90,7 +106,7 @@ void checkValue(const double value)
 {
     if (value <= 0 )
     {
-        printf("Value have to be positive\n");
+        printf("Значение должно быть положительным\n");
         abort();
     }
 }
