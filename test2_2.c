@@ -42,7 +42,7 @@ void getValue(double *x)
     }
 }
 
-double getY(const double a, double x)
+double getY(const double a, const double x)
 {
     if (x < 1)
     {
