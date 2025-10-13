@@ -40,6 +40,12 @@ double getValue();
 void checkValue(const double value);
 
 /**
+@brief PERIMETR - периметр прямоугольника
+@brief SQUARE - площадь прямоугольника
+*/
+enum {PERIMETR = 1, SQUARE};
+
+/**
  * @brief Точка входа в программу
  * @return возвращает 0, если программма выполнена корректно
  */
@@ -52,18 +58,18 @@ int main(void)
     double kat2 = getValue();
     checkValue(kat2);
 
-    double hyp = getH(kat1, kat2);
+    double hyp = getH(kat1,kat2);
 
-    printf("Выберите, что посчитать:\n1)Периметр   2)Площадь\n");
+    printf("Выберите нужный расчет: %d - периметр, %d - площадь\n", PERIMETR, SQUARE);
 
     int choice = (int)getValue();
     switch (choice)
     {
-    case 1:
+    case PERIMETR:
         printf("Периметр равен %.2lf",getP(kat1, kat2, hyp));
         break;
 
-    case 2:
+    case SQUARE:
         printf("Площадь равна %.2lf",getS(kat1, kat2));
         break;
 
