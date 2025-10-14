@@ -38,7 +38,7 @@ void getValue(double *x)
     if (!scanf("%lf", x))
     {
         printf("Ошибка ввода\n");
-        exit(1);
+        abort();
     }
 }
 
