@@ -6,7 +6,7 @@
  * @brief проверяет введенное занчение
  * @param x значение проверяемой переменной
  */
-void getValue(double *x);
+double getValue(void);
 
 /**
  * @brief рассчитывает значение y по формуле
@@ -14,7 +14,7 @@ void getValue(double *x);
  * @param x значение переменной x
  * @return возвращает значение y
  */
-double getY(const double a, double x);
+double getY(const double a, const double x);
 
 /**
  * @brief точка входа в программу
@@ -23,23 +23,25 @@ double getY(const double a, double x);
 int main(void)
 {
     const double a = 2;
-    double x;
-    double y; 
+    double x = 0;
+    double y = 0; 
 
     printf("Введите значение параметра X\n");
-    getValue(&x);
+    x = getValue();
     y = getY(a, x);
     printf("y = %.2f\n", y);
     return 0;
 }
 
-void getValue(double *x)
+double getValue(void)
 {
-    if (!scanf("%lf", x))
+    double x;
+    if (scanf("%lf", &x) != 1)
     {
         printf("Ошибка ввода\n");
         abort();
     }
+    return x;
 }
 
 double getY(const double a, const double x)
