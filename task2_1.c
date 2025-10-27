@@ -62,7 +62,6 @@ int main(void)
         break;
     default:
         printf("Неправильный выбор. Выберите 1 или 2\n");
-        abort();
         return 1;
     }
     return 0;
@@ -96,6 +95,5 @@ void checkValue(const double value)
     {
         printf("Значение должно быть положительным\n");
         abort();
-        return 1;
     }
 }
