@@ -115,5 +115,6 @@ void checkValue(const double value)
     {
         printf("Значение должно быть положительным\n");
         abort();
+        return 1;
     }
 }
