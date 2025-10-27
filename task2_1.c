@@ -17,7 +17,7 @@ double getH(const double kat1, const double kat2);
  * @param hyp гипотенуза треугольника
  * @return возвращает рассчитанный периметр
  */
-double getP(const double kat1, const double kat2, double hyp);
+double getP(const double kat1, const double kat2, const double hyp);
 
 /**
  * @brief рассчитывает площадь треугольника
@@ -76,6 +76,7 @@ int main(void)
     default:
         printf("Неправильный выбор. Выберите 1 или 2\n");
         abort();
+        return 1;
     }
 
     return 0;
