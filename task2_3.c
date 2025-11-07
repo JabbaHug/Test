@@ -3,10 +3,14 @@
 
 /**
  * @brief Проверяет корректность ввода положительного числа
- * @param name имя переменной для вывода пользователю
+ * @param x сторона кирпича
+ * @param y сторона кирпича
+ * @param z сторона кирпича
+ * @param r сторона отверстия
+ * @param s сторона отверстия
  * @return возвращает введённое корректное значение
  */
-double getValue();
+double getValue(double x, double y, double z, double r, double s);
 
 /**
  * @brief Определяет, пройдет ли кирпич через отверстие
@@ -25,34 +29,40 @@ int checkBrick(double x, double y, double z, double r, double s);
  */
 int main(void)
 {
-    double x, y, z;
-    double r, s;
+    double x = 0, y = 0, z = 0;
+    double r = 0 , s = 0;
 
     printf("Введите стороны кирпича (x, y, z):\n");
-    x = getValue();
-    y = getValue();
-    z = getValue();
+    x = getValue(x, y, z, r, s);
+    y = getValue(x, y, z, r, s);
+    z = getValue(x, y, z, r, s);
 
     printf("Введите стороны отверстия (r, s):\n");
-    r = getValue();
-    s = getValue();
+    r = getValue(x, y, z, r, s);
+    s = getValue(x, y, z, r, s);
 
     if (checkBrick(x, y, z, r, s))
-        printf("Кирпич пройдет через отверстие.\n");
+        printf("Кирпич ПРОЙДЁТ через отверстие.\n");
     else
-        printf("Кирпич не пройдёт через отверстие.\n");
+        printf("Кирпич НЕ пройдёт через отверстие.\n");
 
     return 0;
 }
 
-double getValue()
+double getValue(double x, double y, double z, double r, double s)
 {
     double value = 0;
     if (!scanf("%lf",&value))
     {
-        printf("Ошибка ввода\n");
+        printf("Ошибка ввода. Значение должно быть числом\n");
         exit(1);
     }
+    else if ((x < 0) || (y < 0) || (z < 0) || (r < 0) || (s < 0))
+    {
+        printf("Ошибка ввода. Значение должно положительным\n");
+        exit(1);
+    }
+    
     return value;
 }
 
