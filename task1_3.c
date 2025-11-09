@@ -23,7 +23,7 @@ double getP(const double m, const double g);
  */
 int main(void)
 {
-    const double m = 0;
+    double m = 0;
     const double g = 9.80665;
     
     printf("Введите массу мешка с картошкой\n");
