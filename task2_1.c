@@ -92,7 +92,7 @@ double getValue()
 }
 void checkValue(const double value)
 {
-    if (value <= 0 )
+    if (value <= DBL_EPSILON )
     {
         printf("Значение должно быть положительным\n");
         abort();
