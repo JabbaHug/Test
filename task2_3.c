@@ -3,6 +3,11 @@
 
 /**
  * @brief Проверяет корректность ввода положительного числа
+ * @param x сторона кирпича
+ * @param y сторона кирпича
+ * @param z сторона кирпича
+ * @param r сторона отверстия
+ * @param s сторона отверстия
  * @return возвращает введённое корректное значение
  */
 double getValue();
@@ -24,8 +29,11 @@ int checkBrick(double x, double y, double z, double r, double s);
  */
 int main(void)
 {
-    double x = 0, y = 0, z = 0;
-    double r = 0 , s = 0;
+    double x;
+    double y;
+    double z;
+    double r;
+    double s;
 
     printf("Введите стороны кирпича (x, y, z):\n");
     x = getValue();
@@ -52,24 +60,34 @@ double getValue()
         printf("Ошибка ввода. Значение должно быть числом\n");
         exit(1);
     }
-    else if (value <= 0)
+    else if (value < 0)
     {
         printf("Ошибка ввода. Значение должно положительным\n");
         exit(1);
     }
-    
     return value;
 }
 
 int checkBrick(const double x, const double y, const double z, const double r, const double s)
 {
-    double brick1 = x, brick2 = y, brick3 = z;
+    double minH = (r < s) ? r : s;
+    double maxH = (r < s) ? s : r;
 
-    if ((brick1 <= r && brick2 <= s) || (brick1 <= s && brick2 <= r))
+    double a_min, a_max;
+
+    a_min = (x < y) ? x : y;
+    a_max = (x < y) ? y : x;
+    if (a_min <= minH && a_max <= maxH)
         return 1;
-    if ((brick1 <= r && brick3 <= s) || (brick1 <= s && brick3 <= r))
+
+    a_min = (x < z) ? x : z;
+    a_max = (x < z) ? z : x;
+    if (a_min <= minH && a_max <= maxH)
         return 1;
-    if ((brick2 <= r && brick3 <= s) || (brick2 <= s && brick3 <= r))
+
+    a_min = (y < z) ? y : z;
+    a_max = (y < z) ? z : y;
+    if (a_min <= minH && a_max <= maxH)
         return 1;
 
     return 0;
