@@ -35,7 +35,7 @@ int main(void)
 
 double getValue(void)
 {
-    double x;
+    double x = 0;
     if (scanf("%lf", &x) != 1)
     {
         printf("Ошибка ввода\n");
