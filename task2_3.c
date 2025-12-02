@@ -10,7 +10,17 @@
  * @param s сторона отверстия
  * @return возвращает введённое корректное значение
  */
-double getValue();
+double getValuePositive();
+
+/**
+ * @brief Проверяет, поместится ли пара сторон (a,b) в отверстие (minH,maxH)
+ * @param a первая сторона
+ * @param b вторая сторона
+ * @param minH меньшая сторона отверстия
+ * @param maxH большая сторона отверстия
+ * @return 1 — если помещается, 0 — нет
+ */
+int fitsPair(const double a, const double b, const double minH, const double maxH);
 
 /**
  * @brief Определяет, пройдет ли кирпич через отверстие
@@ -21,7 +31,7 @@ double getValue();
  * @param s сторона отверстия
  * @return 1 — если кирпич проходит, 0 — если не проходит
  */
-int checkBrick(double x, double y, double z, double r, double s);
+int checkBrick(const double x,const double y,const double z,const double r,const double s);
 
 /**
  * @brief точка входа в программу
@@ -29,20 +39,14 @@ int checkBrick(double x, double y, double z, double r, double s);
  */
 int main(void)
 {
-    double x;
-    double y;
-    double z;
-    double r;
-    double s;
-
     printf("Введите стороны кирпича (x, y, z):\n");
-    x = getValue();
-    y = getValue();
-    z = getValue();
+    double x = getValuePositive();
+    double y = getValuePositive();
+    double z = getValuePositive();
 
     printf("Введите стороны отверстия (r, s):\n");
-    r = getValue();
-    s = getValue();
+    double r = getValuePositive();
+    double s = getValuePositive();
 
     if (checkBrick(x, y, z, r, s))
         printf("Кирпич ПРОЙДЁТ через отверстие.\n");
@@ -52,7 +56,7 @@ int main(void)
     return 0;
 }
 
-double getValue()
+double getValuePositive()
 {
     double value = 0;
     if (!scanf("%lf",&value))
@@ -68,27 +72,22 @@ double getValue()
     return value;
 }
 
+int fitsPair(const double a, const double b, const double minH, const double maxH)
+{
+    double amin = (a < b) ? a : b;
+    double amax = (a < b) ? b : a;
+
+    return (amin <= minH && amax <= maxH);
+}
+
 int checkBrick(const double x, const double y, const double z, const double r, const double s)
 {
     double minH = (r < s) ? r : s;
     double maxH = (r < s) ? s : r;
 
-    double a_min, a_max;
-
-    a_min = (x < y) ? x : y;
-    a_max = (x < y) ? y : x;
-    if (a_min <= minH && a_max <= maxH)
-        return 1;
-
-    a_min = (x < z) ? x : z;
-    a_max = (x < z) ? z : x;
-    if (a_min <= minH && a_max <= maxH)
-        return 1;
-
-    a_min = (y < z) ? y : z;
-    a_max = (y < z) ? z : y;
-    if (a_min <= minH && a_max <= maxH)
-        return 1;
+    if (fitsPair(x, y, minH, maxH)) return 1;
+    if (fitsPair(x, z, minH, maxH)) return 1;
+    if (fitsPair(y, z, minH, maxH)) return 1;
 
     return 0;
 }
