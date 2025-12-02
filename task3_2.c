@@ -1,46 +1,46 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
-
- /**
- * @brief проверяет введенное занчение
- * @return возвращает значение переменной value
- */
-int getNValue();
+#include <math.h>
 
 /**
- * @brief проверяет введенное занчение
- * @return возвращает значение переменной value
+ * @brief проверяет корректность ввода целого числа
+ * @return возвращает значение
  */
-double getEValue();
+int getValueNonNegative();
 
 /**
- * @brief Вычисляет факториал числа
- * @param k значение переменной k
- * @return значение k!
+ * @brief проверяет корректность ввода вещественного числа
+ * @return возвращает значение
  */
-double factorial(int k);
+double getValuePositive();
 
 /**
- * @brief Вычисляет k-й член ряда
- * @param k значение переменной k
- * @return значение члена ряда по формуле (-1)^k / (k! * (k + 1)!)
+ * @brief вычисляет коэффициент рекуррентного выражения
+ * @param k индекс текущего члена
+ * @return коэффициент (-1)/((k+1)(k+2))
  */
-double getTerm(int k);
+double getRecurent(int k);
 
 /**
- * @brief Вычисляет сумму первых n+1 членов ряда
- * @param n количество членов для суммирования (начиная с 0)
- * @return значение суммы первых n+1 членов
+ * @brief вычисляет k-й член ряда рекуррентно
+ * @param k индекс члена
+ * @return значение члена
  */
-double getSumN(int n);
+double getTerm(const int k);
 
 /**
- * @brief Вычисляет сумму членов ряда с точностью до e
- * @param e значение переменной e
- * @return сумму всех членов ряда, пока |term| >= e
+ * @brief сумма первых n+1 членов ряда
+ * @param n верхний предел
+ * @return сумма
  */
-double getSumE(double e);
+double getSumN(const int n);
+
+/**
+ * @brief сумма членов ряда, пока |term| >= e
+ * @param e точность
+ * @return сумма
+ */
+double getSumE(const double e);
 
 /**
  * @brief точка входа в программу
@@ -52,9 +52,10 @@ int main(void)
     double e;
 
     printf("Введите n: ");
-    n = getNValue();
+    n = getValueNonNegative();
+
     printf("Введите e: ");
-    e = getEValue();
+    e = getValuePositive();
 
     printf("\nСумма первых n членов\n");
     double sumN = getSumN(n);
@@ -62,68 +63,78 @@ int main(void)
     printf("\nСумма членов, пока term >= e\n");
     double sumE = getSumE(e);
 
-    printf("\nРезультаты:\nСумма n = %.10lf\nСумма e = %.10lf\n", sumN, sumE);
+    printf("\nРезультаты:\nСумма n = %.10lf\nСумма e = %.10lf\n",
+           sumN, sumE);
     return 0;
 }
 
-int getNValue()
+int getValueNonNegative()
 {
     int value;
     if (scanf("%d", &value) != 1 || value < 0)
     {
-        printf("Ошибка ввода: n должно быть неотрицательным числом\n");
+        printf("Ошибка ввода\n");
         exit(1);
     }
     return value;
 }
 
-double getEValue()
+double getValuePositive()
 {
     double value;
     if (scanf("%lf", &value) != 1 || value <= 0)
     {
-        printf("Ошибка ввода: e должно быть положительным числом\n");
+        printf("Ошибка ввода\n");
         exit(1);
     }
     return value;
 }
 
-double factorial(int k)
+double getRecurent(const int k)
 {
-    double result = 1;
-    for (int i = 1; i <= k; i = i + 1)
-        result *= i;
-    return result;
+    return -1.0 / ((k + 1.0) * (k + 2.0));
 }
 
-double getTerm(int k)
+double getTerm(const int k)
 {
-    return pow(-1, k) / (factorial(k) * factorial(k + 1));
+    if (k == 0)
+        return -1.0;
+
+    double term = -1.0;
+    for (int i = 0; i < k; i++)
+        term *= getRecurent(i);
+
+    return term;
 }
 
-double getSumN(int n)
+double getSumN(const int n)
 {
-    double sum = 0;
-    for (int k = 0; k <= n; k = k + 1)
+    double term = -1.0;
+    double sum = term;
+
+    printf("k = 0  term = %.10lf  sum = %.10lf\n", term, sum);
+
+    for (int k = 1; k <= n; k++)
     {
-        double term = getTerm(k);
+        term *= getRecurent(k - 1);
         sum += term;
         printf("k = %d  term = %.10lf  sum = %.10lf\n", k, term, sum);
     }
     return sum;
 }
 
-double getSumE(double e)
+double getSumE(const double e)
 {
-    double sum = 0;
+    double term = -1.0;
+    double sum = 0.0;
     int k = 0;
-    while (1)
+
+    while (fabs(term) >= e)
     {
-        double term = getTerm(k);
-        if (fabs(term) < e)
-            break;
         sum += term;
         printf("k = %d  term = %.10lf  sum = %.10lf\n", k, term, sum);
+
+        term *= getRecurent(k);
         k++;
     }
     return sum;
