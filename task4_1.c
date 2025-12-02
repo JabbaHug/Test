@@ -86,8 +86,6 @@ enum { RANDOM = 1, MANUAL = 2 };
  */
 int main()
 {
-    int start = 0;
-    int end = 0;
     srand((unsigned)time(NULL));
 
     printf("Enter array size: "); // Введите размер массива:
@@ -105,8 +103,8 @@ int main()
     {
         case RANDOM:
             printf("Enter START and END for numbers\n");
-            start = checkValue();
-            end = checkValue();
+            int start = checkValue();
+            int end = checkValue();
             fillRandom(arr, size, start, end);
             break;
 
