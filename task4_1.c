@@ -1,33 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <time.h> //используется в main для генерации сида
+
+/**
+ * @brief Проверяет успешность выделения памяти
+ * @param pointer Указатель на выделенную память
+ */
+void checkMemory(const void* pointer); 
 
 /**
  * @brief Считывает целое число с клавиатуры
  * @return Введённое пользователем число
  */
-int readInt();
+int checkValue();
 
 /**
- * @brief Считывает положительный размер массива
- * @param msg Сообщение для вывода
- * @return Размер массива > 0
+ * @brief Считывает целое число с клавиатуры и проверяет, что оно положительно
+ * @return Введённое пользователем число
  */
-size_t readSize(const char* msg);
+int checkValuePositive();
 
 /**
  * @brief Заполняет массив вручную
  * @param arr Указатель на массив
  * @param size Размер массива
  */
-void fillManual(int* arr, size_t size);
+void fillManual(int* arr, const size_t size);
 
 /**
  * @brief Заполняет массив случайными значениями [-15; 15]
  * @param arr Указатель на массив
  * @param size Размер массива
  */
-void fillRandom(int* arr, size_t size);
+void fillRandom(int* arr, const size_t size, const int start, const int end);
 
 
 /**
@@ -44,14 +49,14 @@ int* copyArray(const int* arr, size_t size);
  * @param size Размер массива
  * @return Произведение или 0, если чётных нет
  */
-long long productEven(const int* arr, size_t size);
+int productEven(const int* arr, const size_t size);
 
 /**
  * @brief Заменяет элементы с нечётными индексами на квадраты индексов
  * @param arr Массив
  * @param size Размер массива
  */
-void replaceOddIdx(int* arr, size_t size);
+void replaceOddIdx(int* arr, const size_t size);
 
 /**
  * @brief Ищет положительные элементы, делящиеся на k с остатком 2
@@ -60,14 +65,14 @@ void replaceOddIdx(int* arr, size_t size);
  * @param k Делитель
  * @return 1 если есть такие элементы, иначе 0
  */
-int findPositiveMod2(const int* arr, size_t size, int k);
+void findPositiveMod2(const int* arr, const size_t size, const int k);
 
 /**
  * @brief Печатает массив
  * @param arr Массив
  * @param size Размер массива
  */
-void printArray(const int* arr, size_t size);
+void printArray(const int* arr, const size_t size);
 
 /**
 * @param RANDOM - значение 1, случайное заполнение числами в заданном диапазоне
@@ -81,27 +86,28 @@ enum { RANDOM = 1, MANUAL = 2 };
  */
 int main()
 {
+    int start = 0;
+    int end = 0;
     srand((unsigned)time(NULL));
 
-    size_t size = readSize("Enter array size: "); 
-    // Введите размер массива:
+    printf("Enter array size: "); // Введите размер массива:
+    size_t size = checkValuePositive();
 
     int* arr = malloc(size * sizeof(int));
-    if (arr == NULL)
-    {
-        printf("Memory allocation error"); // Ошибка выделения памяти
-        exit(1);
-    }
+    checkMemory(arr);
 
     printf("Choose fill method (%d random, %d manual): ", RANDOM, MANUAL);
     // Выберите метод заполнения (1 случайно, 2 вручную):
 
-    int choice = readInt();
+    int choice = checkValuePositive();
 
     switch (choice)
     {
         case RANDOM:
-            fillRandom(arr, size);
+            printf("Enter START and END for numbers\n");
+            start = checkValue();
+            end = checkValue();
+            fillRandom(arr, size, start, end);
             break;
 
         case MANUAL:
@@ -118,8 +124,8 @@ int main()
 
     int* copy = copyArray(arr, size);
 
-    long long p = productEven(copy, size);
-    printf("Product of even-valued elements: %lld\n", p);
+    int p = productEven(copy, size);
+    printf("Product of even-valued elements: %d\n", p);
     // Произведение чётных элементов
 
     replaceOddIdx(copy, size);
@@ -127,7 +133,7 @@ int main()
     printArray(copy, size);
 
     printf("Enter k: ");
-    int k = readInt();
+    int k = checkValuePositive();
     findPositiveMod2(copy, size, k);
 
     free(arr);
@@ -136,53 +142,59 @@ int main()
     return 0;
 }
 
-int readInt()
+int checkValue()
 {
-    int x;
-    while (scanf("%d", &x) != 1)
+    int value = 0;
+    if (!scanf("%d",&value))
+    {
+        printf("Invalid input\n");
+        exit(1);
+    }
+    return value;
+}
+
+void checkMemory(const void* pointer)
+{
+    if (pointer == NULL)
+    {
+        printf("Memory allocation error\n");
+        exit(1);
+    }
+}
+
+int checkValuePositive()
+{
+    int x = 0;
+    if (scanf("%d", &x) != 1)
     {
         printf("Invalid input. Enter integer: "); // Неверный ввод. Введите целое число.
-        while (getchar() != '\n');
+        exit(1);
     }
+    else if (x <= 0)
+    {
+        printf("Value has to be positive");
+        exit(1);
+    } 
     return x;
 }
 
-size_t readSize(const char* msg)
+void fillManual(int* arr, const size_t size)
 {
-    printf("%s", msg);
-    int x;
-    while ((scanf("%d", &x) != 1) || x <= 0)
-    {
-        printf("Size must be > 0. Enter again: "); // Размер должен быть > 0. Введите снова.
-        while (getchar() != '\n');
-    }
-    return (size_t)x;
-}
-
-void fillManual(int* arr, size_t size)
-{
-    printf("Enter %zu integers: ", size); // Введите N чисел:
+    printf("Enter %zu integers: ", size); // Введите N чисел (%zu - подходит и для 64 и для 32 бита(универсальное))
     for (size_t i = 0; i < size; i++)
-        arr[i] = readInt();
+        arr[i] = checkValue();
 }
 
-void fillRandom(int* arr, size_t size)
+void fillRandom(int* arr, const size_t size, const int start, const int end)
 {
-    const int START = -15;
-    const int END   = 15;
-
     for (size_t i = 0; i < size; i++)
-        arr[i] = START + rand() % (END - START + 1);
+        arr[i] = start + rand() % (end - start + 1);
 }
 
-int* copyArray(const int* arr, size_t size)
+int* copyArray(const int* arr, const size_t size)
 {
     int* newArr = malloc(size * sizeof(int));
-    if (newArr == NULL)
-    {
-        printf("Memory allocation error"); // Ошибка выделения памяти
-        exit(1);
-    }
+    checkMemory(newArr);
 
     for (size_t i = 0; i < size; i++)
         newArr[i] = arr[i];
@@ -190,9 +202,9 @@ int* copyArray(const int* arr, size_t size)
     return newArr;
 }
 
-long long productEven(const int* arr, size_t size)
+int productEven(const int* arr, const size_t size) // тут int достаточно, если что поменять на long long
 {
-    long long res = 1;
+    int res = 1; // --||--
     int found = 0;
 
     for (size_t i = 0; i < size; i++)
@@ -207,13 +219,13 @@ long long productEven(const int* arr, size_t size)
     return found ? res : 0;
 }
 
-void replaceOddIdx(int* arr, size_t size)
+void replaceOddIdx(int* arr, const size_t size)
 {
     for (size_t i = 1; i < size; i += 2)
         arr[i] = (int)(i * i);
 }
 
-int findPositiveMod2(const int* arr, size_t size, int k)
+void findPositiveMod2(const int* arr, const size_t size, const int k)
 {
     int found = 0;
 
@@ -233,12 +245,11 @@ int findPositiveMod2(const int* arr, size_t size, int k)
         printf("None");
 
     printf("\n");
-    return found;
 }
 
-void printArray(const int* arr, size_t size)
+void printArray(const int* arr, const size_t size)
 {
-    printf("Array: "); // Массив:
+    printf("Array: ");
     for (size_t i = 0; i < size; i++)
         printf("%d ", arr[i]);
     printf("\n");
