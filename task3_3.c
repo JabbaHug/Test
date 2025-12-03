@@ -4,70 +4,94 @@
 #include <float.h>
 #include <limits.h>
 
-const double EPS = 1e-4;  // по условию
-// DBL_EPSILON существует, но он слишком мал (~1e-16), нам не подходит
+/**
+ * @brief Проверяет корректность ввода числа типа double.
+ * @return Введённое корректное значение.
+ */
+double checkValue();
 
-double getValue();
-void checkInput(double start, double end, double step);
-double f_exact(double x);
-double f_series(double x);
+/**
+ * @brief Проверяет корректность шага и диапазона.
+ * @param start Начальное значение диапазона.
+ * @param end   Конечное значение диапазона.
+ * @param step  Шаг итерации.
+ */
+void checkStep(const double start,const double end,const double step);
 
+/**
+ * @brief Вычисляет точное значение функции sin(x).
+ * @param x Аргумент функции.
+ * @return Значение sin(x).
+ */
+double f_exact(const double x);
+
+/**
+ * @brief Вычисляет значение sin(x) с помощью функционального ряда с заданной точностью по рекуррентной формуле.
+ * @param x Аргумент функции.
+ * @return Приближённое значение sin(x).
+ */
+double f_series(const double x, const double ebs);
+
+/**
+ * @brief точка входа в программу
+ * @return возвращает 0, если программа выполнена корректно, иначе 1
+ */
 int main(void)
 {
-    double start, end, step;
+    const double ebs = 1e-4;
 
     printf("Введите начальное значение: ");
-    start = getValue();
+    double start = checkValue();
 
     printf("Введите конечное значение: ");
-    end = getValue();
+    double end = checkValue();
 
     printf("Введите шаг: ");
-    step = getValue();
+    double step = checkValue();
 
-    checkInput(start, end, step);
+    checkStep(start, end, step);
 
     for (double x = start; x <= end + DBL_EPSILON; x += step)
     {
         double exact = f_exact(x);
-        double approx = f_series(x);
+        double approx = f_series(x, ebs);
         printf("x=%.4lf  sin(x)=%.6lf  S=%.6lf\n", x, exact, approx);
     }
 
     return 0;
 }
 
-double getValue()
+double checkValue()
 {
-    double v;
-    if (scanf("%lf", &v) != 1)
+    double value;
+    if (scanf("%lf", &value) != 1)
     {
         printf("Ошибка ввода\n");
-        abort();
+        exit(1);
     }
-    return v;
+    return value;
 }
 
-void checkInput(double start, double end, double step)
+void checkStep(const double start, const double end, const double step)
 {
     if (step <= 0)
     {
         printf("Ошибка: шаг должен быть положительным\n");
-        abort();
+        exit(1);
     }
     if (start > end)
     {
         printf("Ошибка: начало больше конца\n");
-        abort();
+        exit(1);
     }
 }
 
-double f_exact(double x)
+double f_exact(const double x)
 {
     return sin(x);
 }
 
-double f_series(double x)
+double f_series(const double x, const double ebs)
 {
     double term = x;     // первый член 
     double sum = term;
@@ -76,7 +100,7 @@ double f_series(double x)
     {
         double next = -term * x * x / ((2*n + 2)*(2*n + 3));
 
-        if (fabs(next) < EPS)
+        if (fabs(next) < ebs)
             break;
 
         sum += next;
