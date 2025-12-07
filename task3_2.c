@@ -48,14 +48,11 @@ double getSumE(const double e);
  */
 int main(void)
 {
-    int n;
-    double e;
-
     printf("Введите n: ");
-    n = getValueNonNegative();
+    int n = getValueNonNegative();
 
     printf("Введите e: ");
-    e = getValuePositive();
+    double e = getValuePositive();
 
     printf("\nСумма первых n членов\n");
     double sumN = getSumN(n);
