@@ -23,12 +23,10 @@ double getY(const double a, const double x);
 int main(void)
 {
     const double a = 2;
-    double x = 0;
-    double y = 0; 
-
+    
     printf("Введите значение параметра X\n");
-    x = getValue();
-    y = getY(a, x);
+    double x = getValue();
+    double y = getY(a, x);
     printf("y = %.2f\n", y);
     return 0;
 }
