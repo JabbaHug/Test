@@ -132,7 +132,9 @@ int main()
 
     int* arr2 = insertAroundK(arr, size, k);
     printf("After inserting around K: ");
-    printArrayInt(arr2, size + (int)((endWithK(arr[0],k))?2:0)); // просто size не подходит
+    printArrayInt(arr2, size + (int)((endWithK(arr[0],k))?2:0)); // просто size не подходит, при добавлении новых переменных (по заданию)  
+
+
 
     free(arr2); // временный массив освобождается
 
