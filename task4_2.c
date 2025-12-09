@@ -42,7 +42,14 @@ void fillRandom(int* arr, const size_t size, const int start, const int end);
  * @param arr Массив
  * @param size Размер массива
  */
-void printArray(const int* arr, const size_t size);
+void printArrayInt(const int* arr, const size_t size);
+
+/**
+ * @brief Выводит массив на экран
+ * @param arr Массив
+ * @param size Размер массива
+ */
+void printArrayDbl(const double* arr, const size_t size);
 
 /**
  * @brief Проверяет, заканчивается ли число x цифрой k
@@ -50,7 +57,7 @@ void printArray(const int* arr, const size_t size);
  * @param k Цифра (0–9)
  * @return 1 если заканчивается, иначе 0
  */
-int endWithK(int x, int k);
+int endWithK(const int x, const int k);
 
 /**
  * @brief Заменяет предпоследний элемент массива на максимальный по модулю
@@ -66,7 +73,7 @@ void replacePreLast(int* arr, const size_t size);
  * @param k Значение для вставки
  * @return Указатель на новый массив (старый освобождается)
  */
-int* insertAroundK(const int* arr, size_t size, const int k);
+int* insertAroundK(const int* arr, const size_t size, const int k);
 
 /**
  * @brief Формирует массив A по заданному правилу из массива D
@@ -103,40 +110,35 @@ int main()
             int start = checkValue();
             int end = checkValue();
             fillRandom(arr, size, start, end);
+            break;
         }
-        break;
-
         case MANUAL:
             fillManual(arr, size);
             break;
-
         default:
             printf("Invalid choice\n");
             free(arr);
             return 1;
     }
 
-    printArray(arr, size);
+    printArrayInt(arr, size);
 
     replacePreLast(arr, size);
     printf("After replacing pre-last with max abs: ");
-    printArray(arr, size);
+    printArrayInt(arr, size);
 
     printf("Enter K: ");
     int k = checkValue();
 
     int* arr2 = insertAroundK(arr, size, k);
-    free(arr);
-    arr = arr2;
-
     printf("After inserting around K: ");
-    printArray(arr, size);
+    printArrayInt(arr2, size + (int)((endWithK(arr[0],k))?2:0)); // просто size не подходит
+
+    free(arr2); // временный массив освобождается
 
     double* A = buildA(arr, size);
     printf("Array A: ");
-    for (size_t i = 0; i < size; i++)
-        printf("%.2f ", A[i]);
-    printf("\n");
+    printArrDbl(A, size);
 
     free(arr);
     free(A);
@@ -193,11 +195,17 @@ void fillRandom(int* arr, const size_t size, const int start, const int end)
         arr[i] = start + rand() % (end - start + 1);
 }
 
-void printArray(const int* arr, const size_t size)
+void printArrayInt(const int* arr, const size_t size)
 {
-    printf("Array: ");
     for (size_t i = 0; i < size; i++)
         printf("%d ", arr[i]);
+    printf("\n");
+}
+
+void printArrayDbl(const double* arr, const size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+        printf("%lf ", arr[i]);
     printf("\n");
 }
 
