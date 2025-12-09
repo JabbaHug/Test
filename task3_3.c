@@ -38,7 +38,8 @@ double f_series(const double x, const double ebs);
  */
 int main(void)
 {
-    const double ebs = 1e-4;
+    printf("Введите точность:");
+    double ebs = checkValue();
 
     printf("Введите начальное значение: ");
     double start = checkValue();
@@ -96,12 +97,9 @@ double f_series(const double x, const double ebs)
     double term = x;     // первый член 
     double sum = term;
 
-    for (int n = 0; n < INT_MAX; n++)
+    for (int n = 0; n < fabs(f_exact(x) - sum ) < ebs; n++)
     {
         double next = -term * x * x / ((2*n + 2)*(2*n + 3));
-
-        if (fabs(next) < ebs)
-            break;
 
         sum += next;
         term = next;
