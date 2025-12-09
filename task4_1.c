@@ -41,7 +41,7 @@ void fillRandom(int* arr, const size_t size, const int start, const int end);
  * @param size Размер массива
  * @return Указатель на новый массив
  */
-int* copyArray(const int* arr, size_t size);
+int* copyArray(const int* arr, const size_t size);
 
 /**
  * @brief Вычисляет произведение элементов, имеющих чётное значение
