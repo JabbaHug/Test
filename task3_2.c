@@ -22,13 +22,6 @@ double getValuePositive();
 double getRecurent(int k);
 
 /**
- * @brief вычисляет k-й член ряда рекуррентно
- * @param k индекс члена
- * @return значение члена
- */
-double getTerm(const int k);
-
-/**
  * @brief сумма первых n+1 членов ряда
  * @param n верхний предел
  * @return сумма
@@ -92,21 +85,9 @@ double getRecurent(const int k)
     return -1.0 / ((k + 1.0) * (k + 2.0));
 }
 
-double getTerm(const int k)
-{
-    if (k == 0)
-        return -1.0;
-
-    double term = -1.0;
-    for (int i = 0; i < k; i++)
-        term *= getRecurent(i);
-
-    return term;
-}
-
 double getSumN(const int n)
 {
-    double term = -1.0;
+    double term = 1.0;
     double sum = term;
 
     printf("k = 0  term = %.10lf  sum = %.10lf\n", term, sum);
@@ -122,7 +103,7 @@ double getSumN(const int n)
 
 double getSumE(const double e)
 {
-    double term = -1.0;
+    double term = 1.0;
     double sum = 0.0;
     int k = 0;
 
